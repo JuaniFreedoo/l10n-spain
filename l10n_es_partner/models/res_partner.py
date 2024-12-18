@@ -22,12 +22,11 @@ class ResPartner(models.Model):
         )
         no_display_commercial = self.env.context.get("no_display_commercial")
         for partner in self:
-            if no_display_commercial or not name_pattern or not partner.comercial:
-                super(ResPartner, partner)._compute_display_name()
-            else:
+            super(ResPartner, partner)._compute_display_name()
+            if partner.comercial and not no_display_commercial and name_pattern:
                 partner.display_name = name_pattern % {
-                    "name": partner.complete_name,
-                    "comercial_name": partner.comercial,
+                    "name": partner.display_name,
+                    "comercial_name": partner.comercial or "",
                 }
         return True
 
